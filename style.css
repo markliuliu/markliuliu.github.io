@@ -1,0 +1,28 @@
+
+html { line-height: 1; }
+p     		  {  font-family:"微軟正黑體";
+			font-size:10px;
+            font-weight: 250;          
+             }
+			 
+li			 {  font-family:"微軟正黑體";
+			font-size:10px;
+            font-weight: 250;          
+             }
+title		  {  font-family:"微軟正黑體";
+			font-size:10px;
+            font-weight: 250;
+			color:#FFFFFF;
+			background-color: black;
+			background-repeat: repeat-x; 
+			background-attachment: fixed; 
+			}
+bottom	   {  font-family:"微軟正黑體";
+			font-size:10px;
+            font-weight: 250;
+			color:#FFFFFF;
+			background-color: darkblue;
+			background-repeat: repeat-x;
+			background-attachment: scroll; 
+			background-position: bottom left; 
+			}

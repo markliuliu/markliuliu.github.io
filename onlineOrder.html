@@ -1,0 +1,132 @@
+<html>
+	<head>
+		<meta charset = "utf-8">
+		<title>線上點餐系統</title>
+		<link rel = "stylesheet" type = "text/css" href = "style.css">
+		<script type="text/javascript" src="jquery-3.0.0.js" ></script>
+		<script>
+			menu = ["三隻小豬飯", "紐約洋基飯", "三國演義飯"];
+			menuExist = [ false, false, false, false, false, false, false, false ];
+			var selectArea;
+			var node = [];
+			var numberOfMeal = [];
+			var nodeIndex = 0;
+			
+			
+			function start()
+			{
+				document.getElementById("send").addEventListener("click", toSendEmail, false);
+				selectArea = document.getElementById("food");
+				newSelectArea();
+			}
+			function newSelectArea()
+			{
+				var index = nodeIndex;		
+				
+				node[nodeIndex] = document.createElement("select");
+				
+				
+				
+				var option = document.createElement("option");
+				option.setAttribute("value", -1);
+				option.appendChild(document.createTextNode( "請選擇"));
+				node[nodeIndex].appendChild( option );
+				
+				for(var i = 0; i<menu.length ; i++ )
+				{
+					var option = document.createElement("option");
+					option.setAttribute("value", menu[i]);
+					option.appendChild(document.createTextNode( menu[i]));
+					
+					node[nodeIndex].appendChild( option );
+				}
+				numberOfMeal[nodeIndex] = document.createElement("input");
+				numberOfMeal[nodeIndex].setAttribute("type", "number");
+				numberOfMeal[nodeIndex].setAttribute("style", "width: 50px;");
+				
+				document.createElement("p").appendChild(node[nodeIndex]);
+				node[nodeIndex].parentNode.appendChild( numberOfMeal[nodeIndex] );
+				selectArea.appendChild( node[nodeIndex].parentNode );
+				
+				
+				
+				node[nodeIndex].addEventListener("change" , 
+				function(){ lastOne(index); } ,false);
+				nodeIndex++;
+				
+			}
+			function toSendEmail()
+			{
+				var text = "姓名: ";
+				text += document.getElementById("name").value;
+				text += "\n電話: ";
+				text += document.getElementById("telephone").value;
+				text += "\n餐點:\n";
+				for(var i =0 ; i< (nodeIndex-1) ; i++)
+				{
+					text += node[i].value;
+					text += " ";
+					text += numberOfMeal[i].value;
+					text += "個\n"
+				}
+				text += "預計領取時間: ";
+				text += document.getElementById("time").value;
+				text += "\n";
+				console.log(text);
+				
+				//use ajax call php
+				
+				$.ajax({
+					url: 'sendEmail.php',
+					data: {	content: text },
+					type:"POST",
+					dataType:'text',
+
+					success: function(sendEmail){
+						console.log('call php');
+					},
+
+					error: function(xhr) {
+					alert('Ajax request 發生錯誤');
+					$(e.target).attr('disabled', false);
+					},
+				});		
+				
+				
+			}
+			function lastOne(index)
+			{
+								
+				if( index == (nodeIndex-1))
+				{
+					newSelectArea();
+				}
+			}
+			window.addEventListener( "load", start, false);
+		</script>
+		
+	</head>
+	<body>
+			
+			<ul>
+				<li>
+					姓名	:
+					<input type = "text" id = "name" maxlength = "20">
+				</li>
+				<li>
+					電話	:
+					<input type = "text" id = "telephone" maxlength = "20">
+				</li>
+				<li>
+					餐點	:
+					<div id = "food"></div>
+				</li>
+				<li>
+					預計取餐時間	:
+					<input type = "time" id = "time" maxlength = "20">
+				</li>
+			</ul>
+			<button id = "send"> 訂餐</button>
+		
+	</body>
+</html>
